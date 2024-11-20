@@ -21,18 +21,20 @@ import { deepPurple } from '@mui/material/colors'
 import { Avatar, Button, Menu, MenuItem } from "@mui/material"
 import { useNavigate } from 'react-router-dom'
 
-function classNames(...classes) {
-    return classes.filter(Boolean.join(" "));
-}
+// function classNames(...classes) {
+//     return classes.filter(Boolean.join(" "));
+// }
 
 export default function Navigation() {
     const [open, setOpen] = useState(false)
     const navigate = useNavigate();
 
     const [openAuthModal, setOpenAuthModel] = useState(false);
+    console.log(openAuthModal);
+    
     const [anchorEl, setAnchorEl] = useState(null);
     const openUserMenu = Boolean(anchorEl);
-    const jwt = localStorage.getItem("jwt");
+    // const jwt = localStorage.getItem("jwt");
 
     const handleUserClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -46,9 +48,9 @@ export default function Navigation() {
         setOpenAuthModel(true);
     };
 
-    const handleClose = () => {
-        setOpenAuthModel(false);
-    }
+    // const handleClose = () => {
+    //     setOpenAuthModel(false);
+    // }
 
     const handleCategoryClick = (category, section, item, closeFunction) => {
         navigate(`/${category.id}/${section.id}/${item.id}`);
@@ -123,7 +125,7 @@ export default function Navigation() {
                                                     {section.name}
                                                 </p>
                                                 <ul
-                                                    role="list"
+                                                    role="listitem"
                                                     aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
                                                     className="mt-6 flex flex-col space-y-6"
                                                 >
@@ -154,19 +156,19 @@ export default function Navigation() {
 
                         <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                             <div className="flow-root">
-                                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                                <a href="/" className="-m-2 block p-2 font-medium text-gray-900">
                                     Sign in
                                 </a>
                             </div>
                             <div className="flow-root">
-                                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                                <a href="/" className="-m-2 block p-2 font-medium text-gray-900">
                                     Create account
                                 </a>
                             </div>
                         </div>
 
                         <div className="border-t border-gray-200 px-4 py-6">
-                            <a href="#" className="-m-2 flex items-center p-2">
+                            <a href="/" className="-m-2 flex items-center p-2">
                                 <img
                                     alt=""
                                     src="https://tailwindui.com/plus/img/flags/flag-canada.svg"
@@ -200,7 +202,7 @@ export default function Navigation() {
 
                             {/* Logo */}
                             <div className="ml-4 flex lg:ml-0">
-                                <a href="#">
+                                <a href="/">
                                     <span className="sr-only">Your Company</span>
                                     <img
                                         alt=""
@@ -256,7 +258,7 @@ export default function Navigation() {
                                                                             {section.name}
                                                                         </p>
                                                                         <ul
-                                                                            role="list"
+                                                                            role="listitem"
                                                                             aria-labelledby={`${section.name}-heading`}
                                                                             className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                                                         >
@@ -338,7 +340,7 @@ export default function Navigation() {
 
                                 {/* Search */}
                                 <div className="flex lg:ml-6">
-                                    <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+                                    <a href="/" className="p-2 text-gray-400 hover:text-gray-500">
                                         <span className="sr-only">Search</span>
                                         <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
                                     </a>
@@ -346,7 +348,7 @@ export default function Navigation() {
 
                                 {/* Cart */}
                                 <div className="ml-4 flow-root lg:ml-6">
-                                    <a href="#" className="group -m-2 flex items-center p-2">
+                                    <a href="/" className="group -m-2 flex items-center p-2">
                                         <ShoppingBagIcon
                                             aria-hidden="true"
                                             className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"

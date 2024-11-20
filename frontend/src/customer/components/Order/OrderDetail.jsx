@@ -2,7 +2,6 @@ import React from 'react'
 import AdressCard from '../AddressCard/AdressCard'
 import OrderTracking from './OrderTracking'
 import { Box, Grid } from '@mui/material'
-import { StarIcon } from '@heroicons/react/24/outline'
 import { deepPurple } from '@mui/material/colors'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 

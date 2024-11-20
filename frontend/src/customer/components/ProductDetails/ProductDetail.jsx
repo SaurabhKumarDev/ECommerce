@@ -18,7 +18,6 @@
 'use client'
 
 import { useState } from 'react'
-import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import { Rating, Box, Button, Grid, LinearProgress } from '@mui/material'
 import ProductReviewCard from './ProductReviewCard'
@@ -74,14 +73,14 @@ const product = {
     details:
         'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
 }
-const reviews = { href: '#', average: 4, totalCount: 117 }
+// const reviews = { href: '#', average: 4, totalCount: 117 }
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function ProductDetail() {
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
+    // const [selectedColor, setSelectedColor] = useState(product.colors[0])
     const [selectedSize, setSelectedSize] = useState(product.sizes[2])
     const navigate = useNavigate();
     const handleAddToCart = () => {
@@ -92,7 +91,7 @@ export default function ProductDetail() {
         <div className="bg-white lg:px-20">
             <div className="pt-6">
                 <nav aria-label="Breadcrumb">
-                    <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                    <ol role="listitem" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                         {product.breadcrumbs.map((breadcrumb) => (
                             <li key={breadcrumb.id}>
                                 <div className="flex items-center">
@@ -240,7 +239,7 @@ export default function ProductDetail() {
                                 <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
 
                                 <div className="mt-4">
-                                    <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
+                                    <ul role="listitem" className="list-disc space-y-2 pl-4 text-sm">
                                         {product.highlights.map((highlight) => (
                                             <li key={highlight} className="text-gray-400">
                                                 <span className="text-gray-600">{highlight}</span>

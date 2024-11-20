@@ -15,6 +15,7 @@ const DeliveryAddressForm = () => {
             phone:data.get("phone"),
             zip:data.get("zip"),
         }   
+        console.log(address);
     }
     return (
         <div>
