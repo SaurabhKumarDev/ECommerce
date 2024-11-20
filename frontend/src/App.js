@@ -9,11 +9,6 @@ function App() {
             <Routes>
                 <Route path='/*' element={<CustomerRouters />} />
             </Routes>
-            
-            <div className='mt-9'>
-               
-            </div>
-            
         </div>
     );
 }
