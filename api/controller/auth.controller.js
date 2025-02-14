@@ -21,12 +21,12 @@ const login = async (req, res) => {
     try {
         const user = await userService.getUserByEmail(email);
 
-        const isPasswordValid = await bcrypt.compare(password, user[0].password);
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).send({ message: "Invalid password" });
         }
 
-        const token = jwtProvider.generateToken(user[0]._id);
+        const token = jwtProvider.generateToken(user._id);
 
         return res.status(200).send({ token, message: "Login successful" });
     } catch (error) {

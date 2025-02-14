@@ -1,5 +1,5 @@
-const User = require("../models/user.model");
-const jwtProvider = require("../config/jwtProvider");
+const User = require("../models/user.model.js");
+const jwtProvider = require("../config/jwtProvider.js");
 const bcrypt = require("bcrypt");
 
 const createUser = async (userData) => {
@@ -39,7 +39,7 @@ const findUserById = async (userId) => {
 
 const getUserByEmail = async (email) => {
     try {
-        const user = await User.find({ email });
+        const user = await User.findOne({ email });
         if (!user) {            
             throw new Error("User not found with email : ", email);
         }
