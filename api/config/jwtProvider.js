@@ -8,7 +8,8 @@ const generateToken = (userId) => {
 
 const getUserIdFromToken = (token) => {
     try {
-        const decodedToken = jwt.verify(token, SECRET_KEY);
+        // Error : when i am using the user profile it work singly but in another api it will not work because token is return array
+        const decodedToken = jwt.verify(token[1], SECRET_KEY);
         return decodedToken.userId; 
     } catch (error) {
         console.error("Invalid or expired token: ", error.message);

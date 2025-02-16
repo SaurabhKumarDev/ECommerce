@@ -9,6 +9,7 @@ async function createProduct(reqData) {
             name: reqData.topLevelCategory,
             level: 1
         })
+        await topLevel.save()
     }
 
     let secondLevel = await Category.findOne({
@@ -22,81 +23,83 @@ async function createProduct(reqData) {
             parentCategory: topLevel._id,
             level: 2
         })
+        await secondLevel.save()
     }
 
     let thirdLevel = await Category.findOne({
-        name: reqData.thirdLevelCategory, 
-        parentCategory:secondLevel._id 
+        name: reqData.thirdLevelCategory,
+        parentCategory: secondLevel._id
     })
 
     if (!thirdLevel) {
-        thirdLevel = new Category ({
+        thirdLevel = new Category({
             name: reqData.thirdLevelCategory,
             parentCategory: secondLevel._id,
-            level:3
+            level: 3
         })
+        await thirdLevel.save()
     }
 
-    const product = new Product ({
-        title:reqData.title,
-        color:reqData.color,
-        description:reqData.description,
+    const product = new Product({
+        title: reqData.title,
+        color: reqData.color,
+        description: reqData.description,
         discountedPrice: reqData.discountedPrice,
         discountPresent: reqData.discountPresent,
-        imageUrl:reqData.imageUrl,
-        brand:reqData.brand,
-        price:reqData.price,
-        sizes:reqData.size,
-        quantity:reqData.quantity,
-        category:thirdLevel._id 
+        imageUrl: reqData.imageUrl,
+        brand: reqData.brand,
+        price: reqData.price,
+        sizes: reqData.sizes,
+        quantity: reqData.quantity,
+        category: thirdLevel._id
     })
 
     return await product.save();
 }
 
-async function deleteProduct (productId) {
-    const product =await findProductById(productId);
+async function deleteProduct(productId) {
+    const product = await findProductById(productId);
 
     await Product.findByIdAndDelete(productId);
     return "Product deleted successfully";
 }
 
-async function updateProduct (productId, reqData) {
-    return await Product.findByIdAndUpdate(productId,reqData);
+async function updateProduct(productId, reqData) {
+    return await Product.findByIdAndUpdate(productId, reqData);
 }
 
-async function findProductById (id) {
+async function findProductById(id) {
     const product = await Product.findById(id).populate("category").exec();
 
     if (!product) {
-        throw new Error ("Product not found with id ",id);
+        throw new Error("Product not found with id ", id);
     }
 
     return product;
 }
 
-async function getAllProducts (reqQuery) {
-    let {category,color,sizes,minPrice,maxPrice,minDiscount,sort,stock,pageNumber,pageSize} = reqQuery;
+async function getAllProducts(reqQuery) {
+    let { category, color, sizes, minPrice, maxPrice, minDiscount, sort, stock, pageNumber, pageSize } = reqQuery;
 
     pageSize = pageSize || 10;
 
     let query = Product.find().populate("category");
 
     if (category) {
-        const existCategory = await Category.findOne({name:category});
+        const existCategory = await Category.findOne({ name: category });
         if (existCategory) {
-            query= query.where("category").equals(existCategory._id);
+            query = query.where("category").equals(existCategory._id);
         } else {
-            return {content:[],currentPage:1, totatlPage:0}
+            return { content: [], currentPage: 1, totalPage: 0 }
         }
     }
 
     if (color) {
         const colorSet = new Set(color.split(",").map(color => color.trim().toLowerCase()));
 
-        const colorRegex = colorSet>0?new RegExp([...colorSet].join("|"),"i"): null;
+        const colorRegex = colorSet > 0 ? new RegExp([...colorSet].join("|"), "i") : null;
 
-        query =query.where ("color").regex(colorRegex);
+        query = query.where("color").regex(colorRegex);
     }
 
     if (sizes) {
@@ -104,6 +107,7 @@ async function getAllProducts (reqQuery) {
         query.query.where("size.name").in([...sizesSet]);
     }
 
+    // Error occur while both value present
     if (minPrice && maxPrice) {
         query = await query.where('discountedPrice').gte(minPrice).lte(maxPrice);
     }
@@ -123,7 +127,7 @@ async function getAllProducts (reqQuery) {
 
     if (sort) {
         const sortDirection = sort === "price_high" ? -1 : 1;
-        query = query.sort({discountedPrice:sortDirection})
+        query = query.sort({ discountedPrice: sortDirection })
     }
 
     const totalProducts = await Product.countDocuments(query);
@@ -134,14 +138,15 @@ async function getAllProducts (reqQuery) {
 
     const products = await query.exec();
 
-    const totalPages = Math.ceil(totalProducts/pageSize);
+    const totalPages = Math.ceil(totalProducts / pageSize);
 
-    return {content: products, currentPage: pageNumber, totalPages}
+    return { content: products, currentPage: pageNumber, totalPages }
 }
 
-async function createMultipleProduct (products) {
+
+async function createMultipleProduct(products) {
     for (let product of products) {
-        await createProduct (products);
+        await createProduct(products);
     }
 }
 

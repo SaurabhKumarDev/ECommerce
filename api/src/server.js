@@ -1,7 +1,7 @@
 const app = require(".");
 const { connectToDB } = require("../config/db")
 
-const Port = 5000;
+const Port = 5001;
 
 app.listen(Port, async () => {
     await connectToDB();
