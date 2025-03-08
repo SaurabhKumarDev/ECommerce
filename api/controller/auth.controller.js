@@ -26,9 +26,9 @@ const login = async (req, res) => {
             return res.status(401).send({ message: "Invalid password" });
         }
 
-        const token = jwtProvider.generateToken(user._id);
+        const jwt = jwtProvider.generateToken(user._id);
 
-        return res.status(200).send({ token, message: "Login successful" });
+        return res.status(200).send({ jwt, message: "Login successful" });
     } catch (error) {
         console.error("Error during login: ", error.message);
         return res.status(500).send({ message: "An error occurred during login", error: error.message });
