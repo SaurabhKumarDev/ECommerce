@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
     Dialog,
     DialogBackdrop,
@@ -19,22 +19,27 @@ import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@her
 import { navigation } from './navigationData'
 import { deepPurple } from '@mui/material/colors'
 import { Avatar, Button, Menu, MenuItem } from "@mui/material"
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import AuthModal from '../../Auth/AuthModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser, logout } from '../../../State/Auth/Action'
 
-// function classNames(...classes) {
-//     return classes.filter(Boolean.join(" "));
-// }
+function classNames(...classes) {
+    return classes.filter(Boolean.join(" "));
+}
 
 export default function Navigation() {
     const [open, setOpen] = useState(false)
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [openAuthModal, setOpenAuthModel] = useState(false);
-    console.log(openAuthModal);
-    
+
     const [anchorEl, setAnchorEl] = useState(null);
     const openUserMenu = Boolean(anchorEl);
-    // const jwt = localStorage.getItem("jwt");
+    const jwt = localStorage.getItem("jwt");
+    const { auth } = useSelector(store => store);
+    const dispatch = useDispatch();
 
     const handleUserClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -48,14 +53,35 @@ export default function Navigation() {
         setOpenAuthModel(true);
     };
 
-    // const handleClose = () => {
-    //     setOpenAuthModel(false);
-    // }
+    const handleClose = () => {
+        setOpenAuthModel(false);
+    }
 
     const handleCategoryClick = (category, section, item, closeFunction) => {
         navigate(`/${category.id}/${section.id}/${item.id}`);
         closeFunction();
     };
+
+    useEffect(()=> {
+        if (jwt) {
+            dispatch(getUser(jwt))
+        }
+    }, [jwt, auth.jwt])
+
+    useEffect(() => {
+        if (auth.user) {
+            handleClose();
+        }
+
+        if (location.pathname === "/login" && location.pathname === "/register") {
+            navigate(-1)
+        }
+    }, [auth.user])
+
+    const handleLogout = () => {
+        dispatch(logout);
+        handleCloseUserMenu();
+    }
 
 
     return (
@@ -294,7 +320,7 @@ export default function Navigation() {
 
                             <div className="ml-auto flex items-center">
                                 <div className="hidden lg:ml-8 lg:flex">
-                                    {true ? (
+                                    {auth.user?.firstName ? (
                                         <div>
                                             <Avatar
                                                 className="text-white"
@@ -307,7 +333,7 @@ export default function Navigation() {
                                                     color: "white",
                                                     cursor: "pointer"
                                                 }}
-                                            >S</Avatar>
+                                            >{auth.user?.firstName[0].toUpperCase()}</Avatar>
                                             <Menu
                                                 id="basic-menu"
                                                 anchorEl={anchorEl}
@@ -320,10 +346,10 @@ export default function Navigation() {
                                                 <MenuItem onClick={handleCloseUserMenu}>
                                                     Profile
                                                 </MenuItem>
-                                                <MenuItem onClick={()=>navigate("/account/order")}>
+                                                <MenuItem onClick={() => navigate("/account/order")}>
                                                     My Orders
                                                 </MenuItem>
-                                                <MenuItem>
+                                                <MenuItem onClick={handleLogout}>
                                                     Logout
                                                 </MenuItem>
                                             </Menu>
@@ -362,6 +388,8 @@ export default function Navigation() {
                     </div>
                 </nav>
             </header>
+
+            <AuthModal handleClose={handleClose} open={openAuthModal} />
         </div>
     )
 }
