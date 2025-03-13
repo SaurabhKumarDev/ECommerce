@@ -45,7 +45,7 @@ async function createProduct(reqData) {
         color: reqData.color,
         description: reqData.description,
         discountedPrice: reqData.discountedPrice,
-        discountPresent: reqData.discountPresent,
+        discountPresent: reqData.discountPresent ? reqData.discountPresent : 0,
         imageUrl: reqData.imageUrl,
         brand: reqData.brand,
         price: reqData.price,
@@ -96,32 +96,31 @@ async function getAllProducts(reqQuery) {
 
     if (color) {
         const colorSet = new Set(color.split(",").map(color => color.trim().toLowerCase()));
-
-        const colorRegex = colorSet > 0 ? new RegExp([...colorSet].join("|"), "i") : null;
+        const colorRegex = colorSet.size > 0 ? new RegExp([...colorSet].join("|"), "i") : null;
 
         query = query.where("color").regex(colorRegex);
     }
 
     if (sizes) {
         const sizesSet = new Set(sizes);
-        query.query.where("size.name").in([...sizesSet]);
+        query = query.where("sizes.name").in([...sizesSet]);
     }
 
     // Error occur while both value present
     if (minPrice && maxPrice) {
-        query = await query.where('discountedPrice').gte(minPrice).lte(maxPrice);
+        query = query.where('discountedPrice').gte(Number(minPrice)).lte(Number(maxPrice));
     }
 
     if (minDiscount) {
-        query = query.where("discountedPercent").gte(minDiscount);
+        query = query.where("discountPresent").gte(minDiscount);
     }
 
     if (stock) {
-        if (stock == "in_stock") {
+        if (stock === "in_stock") {
             query = query.where("quantity").gt(0);
         }
-        else if (stock == "out_of_stock") {
-            query = query.where("quantity").gt(1);
+        else if (stock === "out_of_stock") {
+            query = query.where("quantity").eq(0);
         }
     }
 
@@ -134,9 +133,10 @@ async function getAllProducts(reqQuery) {
 
     const skip = (pageNumber - 1) * pageSize;
 
-    query = query.skip(skip).limit(pageSize);
-
-    const products = await query.exec();
+    const products = await Product.find(query)  // Apply pagination on find()
+    .skip(skip)
+    .limit(pageSize)
+    .exec();
 
     const totalPages = Math.ceil(totalProducts / pageSize);
 

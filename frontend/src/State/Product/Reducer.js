@@ -7,17 +7,17 @@ const initialState = {
     error: null
 }
 
-export const customerProductReducer = () => {
+export const customerProductReducer = (state = initialState, action) => {
     switch (action.type) {
         case FIND_PRODUCT_REQUEST:
         case FIND_PRODUCT_BY_ID_REQUEST:
-            return { ...initialState, loading: true, error: null }
+            return { ...state, loading: true, error: null }
 
         case FIND_PRODUCT_SUCCESS:
-            return { ...initialState, loading: false, error: null, products: action.payload }
+            return { ...state, loading: false, error: null, products: action.payload }
 
         case FIND_PRODUCT_BY_ID_SUCCESS:
-            return { ...initialState, loading: false, error: null, product: action.payload }
+            return { ...state, loading: false, error: null, product: action.payload }
 
         case FIND_PRODUCT_FAILURE:
         case FIND_PRODUCT_BY_ID_FAILURE:
