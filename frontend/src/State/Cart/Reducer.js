@@ -7,12 +7,12 @@ const initialState = {
     cartItems: []
 }
 
-export const cartReducer = (state = initialState, action) => () => {
+export const cartReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_ITEM_TO_CART_REQUEST:
             return { ...state, loading: true, error: null };
         case ADD_ITEM_TO_CART_SUCCESS:
-            return { ...state, cartItems: [...state.cartItems, action.payload.cartItems], loading: false, error:null };
+            return { ...state, cartItems: [...state.cartItems, action.payload.cartItems], loading: false, error: null };
         case ADD_ITEM_TO_CART_FAILURE:
             return { ...state, loading: false, error: action.payload };
         case GET_CART_REQUEST:
@@ -23,11 +23,11 @@ export const cartReducer = (state = initialState, action) => () => {
             return { ...state, error: action.payload, loading: false };
         case REMOVE_CART_ITEM_REQUEST:
         case UPDATE_CART_ITEM_REQUEST:
-            return { ...state, loading: true, error:null };
+            return { ...state, loading: true, error: null };
         case REMOVE_CART_ITEM_SUCCESS:
-            return { ...state, cartItems: state.cartItems.filter((item) => item.id !== action.payload), loading: false };
+            return { ...state, deleteCartItem: action.payload, loading: false };
         case UPDATE_CART_ITEM_SUCCESS:
-            return { ...state, cartItems: state.cartItems.map((item) => item.id === action.payload.id ? action.payload : item), loading: false };
+            return { ...state, updateCartItem: action.payload, loading: false };
         case REMOVE_CART_ITEM_FAILURE:
         case UPDATE_CART_ITEM_FAILURE:
             return { ...state, error: action.payload, loading: false };

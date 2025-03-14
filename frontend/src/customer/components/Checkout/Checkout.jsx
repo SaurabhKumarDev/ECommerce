@@ -16,7 +16,7 @@ export default function Checkout() {
     const location = useLocation();
     const querySearch = new URLSearchParams(location.search);
 
-    const step = querySearch.get("step")
+    const step = Number(querySearch.get("step"))
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -25,7 +25,7 @@ export default function Checkout() {
     return (
         <div className='px-10 lg:px-20'>
             <Box sx={{ width: '100%' }}>
-                <Stepper activeStep={step} s>
+                <Stepper activeStep={step}>
                     {steps.map((label, index) => {
                         const stepProps = {};
                         const labelProps = {};

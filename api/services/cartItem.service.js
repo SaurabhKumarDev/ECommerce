@@ -15,7 +15,7 @@ async function updateCartItem(userId, cartItemId, cartItemData) {
         }
 
         if (user._id.toString() === userId.toString()) {
-            item.quantity = cartItemData.quantity;
+            item.quantity = Number(cartItemData.quantity);
             item.price = item.quantity * item.product.price;
             item.discountedPrice = item.quantity * item.product.discountedPrice;
             
