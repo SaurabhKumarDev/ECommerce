@@ -1,14 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AdressCard from '../AddressCard/AdressCard'
 import { Box, Button, Grid, TextField } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { createOrder } from "../../../State/Order/Action"
 import { useNavigate } from 'react-router-dom'
 import { store } from '../../../State/store'
+import { findAddressByUserId } from '../../../State/Address/Action'
 
 const DeliveryAddressForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { address } = useSelector(store => store);
+    console.log("Auth for address:", address);
+
+    useEffect(()=>{
+        dispatch(findAddressByUserId())
+    },[])
+
+    // Function to handle the "Deliver here" btn inside address list
+    const handleDeliverHere = (selectedAddress) => {
+        const orderData = { address: selectedAddress, navigate };
+        dispatch(createOrder(orderData));
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,10 +42,14 @@ const DeliveryAddressForm = () => {
         <div>
             <Grid container spacing={4}>
                 <Grid xs={12} lg={5} className="border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll">
-                    <div className='p-5 py-7 border-b cursor-pointer'>
-                        <AdressCard />
-                        <Button sx={{ mt: 2, bgcolor: "RGB(145 85 253)" }} size='large' variant='contained'>Deliver Here</Button>
-                    </div>
+                    {address?.addresses?.address?.map((addr) => (
+                        <div className='p-5 py-7 border-b cursor-pointer' key={address.id}>
+                            <AdressCard address={addr} />
+                            <Button sx={{ mt: 2, bgcolor: "RGB(145 85 253)" }} size="large" variant="contained" onClick={()=>handleDeliverHere(addr)}>
+                                Deliver Here
+                            </Button>
+                        </div>
+                    ))}
                 </Grid>
                 <Grid item xs={12} lg={7}>
                     <Box className="border rounded-s-md shadow-md p-5">

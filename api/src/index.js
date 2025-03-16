@@ -40,4 +40,7 @@ app.use("/api/ratings", ratingRouter);
 const adminOrderRouter = require("../routes/adminOrder.route.js");
 app.use("/api/admin/orders", adminOrderRouter);
 
+const addressRouter = require("../routes/address.route.js");
+app.use("/api/address", addressRouter);
+
 module.exports = app;
