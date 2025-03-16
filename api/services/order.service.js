@@ -23,12 +23,12 @@ async function createOrder(user, shipAddress) {
 
     for (const item of cart.cartItems) {
         const orderItem = new OrderItem({
-            price: item.price,
             product: item.product,
             quantity: item.quantity,
-            size: item.size,
             userId: item.userId,
-            discountedPrice: item.discountedPrice
+            size: item.size,
+            discountedPrice: item.discountedPrice,
+            price: item.product.price * item.quantity,
         })
 
         const createdOrderItem = await orderItem.save();
@@ -37,8 +37,8 @@ async function createOrder(user, shipAddress) {
 
     const createdOrder = new Order({
         user, orderItems, totalPrice: cart.totalPrice, totalDiscountedPrice: cart.totalDiscountedPrice,
-        discount: cart.discount, totalItem: cart.totalItem, shipAddress: address
-    })
+        discount: cart.discount, totalItem: cart.totalItem, shippingAddress: address
+    })    
 
     const savedOrder = await createdOrder.save();
 

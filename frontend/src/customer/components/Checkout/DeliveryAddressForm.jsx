@@ -1,9 +1,10 @@
 import React from 'react'
 import AdressCard from '../AddressCard/AdressCard'
 import { Box, Button, Grid, TextField } from '@mui/material'
-import { useDispatch } from 'react-redux'
-import {createOrder} from "../../../State/Order/Action"
+import { useDispatch, useSelector } from 'react-redux'
+import { createOrder } from "../../../State/Order/Action"
 import { useNavigate } from 'react-router-dom'
+import { store } from '../../../State/store'
 
 const DeliveryAddressForm = () => {
     const dispatch = useDispatch();
@@ -11,19 +12,18 @@ const DeliveryAddressForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = new FormData(e.currentTarget); 
+        const data = new FormData(e.currentTarget);
         const address = {
-            firstName:data.get("firstname"),
-            lastName:data.get("lastname"),
-            city:data.get("city"),
-            state:data.get("state"),
-            streetAddress:data.get("address"),
-            mobile:data.get("phone"),
-            zipCode:data.get("zip"),
-        }   
-        const orderData = {address,navigate};
+            firstName: data.get("firstname"),
+            lastName: data.get("lastname"),
+            city: data.get("city"),
+            state: data.get("state"),
+            streetAddress: data.get("address"),
+            mobile: data.get("phone"),
+            zipCode: data.get("zip"),
+        }
+        const orderData = { address, navigate };
         dispatch(createOrder(orderData));
-        console.log(address);
     }
     return (
         <div>
@@ -60,7 +60,7 @@ const DeliveryAddressForm = () => {
                                     <TextField required id='phone' name='phone' label="Phone Number" fullWidth autoComplete='given-Name' />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <Button  sx={{ mt: 2, bgcolor: "RGB(145 85 253)", py:1.5 }} size='large' type='submit' variant='contained'>Deliver Here</Button>
+                                    <Button sx={{ mt: 2, bgcolor: "RGB(145 85 253)", py: 1.5 }} size='large' type='submit' variant='contained'>Deliver Here</Button>
                                 </Grid>
                             </Grid>
                         </form>

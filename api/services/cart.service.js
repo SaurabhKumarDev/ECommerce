@@ -22,18 +22,19 @@ async function findUserCart(userId) {
         cart.cartItems = cartItems;
 
         let totalPrice = 0;
-        let totalDiscountedPrice = 0;
         let totalItem = 0;
+        let discount = 0;
 
         for (let cartItem of cart.cartItems) {
-            totalPrice += cartItem.price;
-            totalDiscountedPrice += cartItem.discountedPrice;
+            totalPrice += cartItem?.product?.price * cartItem.quantity;
             totalItem += cartItem.quantity;
+            discount += cartItem?.product?.discountedPrice * cartItem.quantity;
         }
 
         cart.totalPrice = totalPrice;
         cart.totalItem = totalItem;
-        cart.discount = totalPrice - totalDiscountedPrice;
+        cart.discount = discount;
+        cart.totalDiscountedPrice = totalPrice - discount;
 
         return cart;
     } catch (error) {
