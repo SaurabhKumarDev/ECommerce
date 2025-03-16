@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 import DeliveryAddressForm from './DeliveryAddressForm';
 import OrderSummery from './OrderSummery';
 
-const steps = ['Login', 'Delivery Address', 'Order Summery', 'Payment'];
+const steps = ['Product','Login', 'Delivery Address', 'Order Summery', 'Payment'];
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
